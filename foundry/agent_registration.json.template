@@ -1,0 +1,20 @@
+{
+  "name": "invoice-agent",
+  "description": "Invoice extraction agent using Document Intelligence",
+  "backend": {
+    "type": "http",
+    "url": "https://invoice-agent-docintelligence2.azurewebsites.net/api/invoice",
+    "auth": {
+      "type": "header",
+      "headerName": "x-functions-key",
+      "headerValue": "<FUNCTION_KEY>"
+    }
+  },
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "text": {"type": "string"},
+      "file_path": {"type": "string"}
+    }
+  }
+}

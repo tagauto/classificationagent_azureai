@@ -1,0 +1,9 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT": "",
+    "AZURE_DOCUMENT_INTELLIGENCE_KEY": ""
+  }
+}

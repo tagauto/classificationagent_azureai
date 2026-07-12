@@ -1,0 +1,6 @@
+name: invoice-agent-foundry
+services:
+  functionapp:
+    project: .
+    language: python
+    host: function

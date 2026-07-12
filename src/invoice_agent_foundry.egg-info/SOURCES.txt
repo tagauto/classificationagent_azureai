@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+src/invoice_agent/__init__.py
+src/invoice_agent/agent.py
+src/invoice_agent/cli.py
+src/invoice_agent_foundry.egg-info/PKG-INFO
+src/invoice_agent_foundry.egg-info/SOURCES.txt
+src/invoice_agent_foundry.egg-info/dependency_links.txt
+src/invoice_agent_foundry.egg-info/entry_points.txt
+src/invoice_agent_foundry.egg-info/requires.txt
+src/invoice_agent_foundry.egg-info/top_level.txt
+tests/test_agent.py

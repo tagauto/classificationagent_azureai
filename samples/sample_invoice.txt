@@ -1,0 +1,4 @@
+Vendor: Northwind Property Services
+Invoice # 10042
+Date: 2026-07-10
+Amount Due: $1250.00

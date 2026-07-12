@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: invoice-agent-foundry
+Version: 0.1.0
+Summary: Azure AI Foundry agent for extracting and classifying vendor invoices
+Requires-Python: >=3.10
+Requires-Dist: azure-ai-documentintelligence>=1.0.0
+Requires-Dist: azure-ai-projects>=1.0.0
+Requires-Dist: azure-identity>=1.20.0
+Requires-Dist: pytest>=8.0.0
