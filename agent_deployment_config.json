@@ -1,0 +1,31 @@
+﻿{
+  "agent": {
+    "name": "invoice-agent",
+    "description": "Invoice extraction and analysis agent that processes invoice documents using Azure Document Intelligence and extracts structured data including vendor name, invoice number, total amount, and date.",
+    "model": "gpt-5-mini",
+    "instructions": "You are an AI data extraction and classification agent specializing in real estate property management invoices.\n\nYour task is to analyze the text or layout data of the vendor invoice provided and extract key accounting details.\n\nOutput your response strictly in the following JSON format:\n{\n  \"property_name\": \"Name of the managed apartment complex, building, or address\",\n  \"vendor_name\": \"The service provider or vendor company name\",\n  \"invoice_category\": \"Select ONE: [Utilities, Landscaping/Grounds, Plumbing, HVAC, Electrical, General Maintenance, Cleaning/Janitorial, Legal/Professional, Office Supplies, Other]\",\n  \"invoice_number\": \"Invoice reference number or string\",\n  \"invoice_date\": \"YYYY-MM-DD\",\n  \"total_amount\": 0.00,\n  \"currency\": \"USD\"\n}\n\nIf a field cannot be found, set its value to null. Do not include any markdown formatting wrappers or extra conversational text outside of the JSON block."
+  },
+  "tool": {
+    "type": "openapi",
+    "name": "invoice_processor",
+    "display_name": "Invoice Processor",
+    "description": "Processes invoice documents and extracts structured information using Azure Document Intelligence. Returns extracted fields and analysis results with confidence scores.",
+    "spec_file": "openapi_schema.json",
+    "endpoint": "https://invoice-agent-docintelligence2.azurewebsites.net/api/invoice",
+    "auth": {
+      "type": "header",
+      "header": "x-functions-key",
+      "value": "<AZURE_FUNCTION_KEY>"
+    }
+  },
+  "foundry": {
+    "endpoint": "https://tagoreautomation-2862-resource.services.ai.azure.com",
+    "project": "tagoreautomation-2862",
+    "subscription": "d65af6df-c048-43eb-8cfd-ea54c482e516",
+    "resource_group": "rmtag-openai-agents-rg"
+  },
+  "deployment_status": "READY",
+  "deployment_date": "2025-01-15",
+  "deployment_method": "Azure AI Foundry SDK"
+}
+

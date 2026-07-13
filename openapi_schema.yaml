@@ -1,0 +1,199 @@
+openapi: 3.0.3
+info:
+  title: Invoice Processing API
+  description: API for extracting and analyzing invoice data using Azure Document Intelligence
+  version: 1.0.0
+  contact:
+    name: Invoice Processing Team
+    url: https://github.com/tagauto/classificationagent_azureai
+  license:
+    name: MIT
+
+servers:
+  - url: https://invoice-agent-docintelligence2.azurewebsites.net
+    description: Production invoice processing service
+
+tags:
+  - name: Invoice
+    description: Invoice processing operations
+
+paths:
+  /api/invoice:
+    post:
+      tags:
+        - Invoice
+      summary: Process invoice and extract data
+      operationId: processInvoice
+      description: Analyzes invoice data from text or file and extracts structured information including vendor name, invoice number, total amount, and date using Azure Document Intelligence
+      security:
+        - api_key: []
+      requestBody:
+        required: true
+        description: Invoice data to process
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - text
+              properties:
+                text:
+                  type: string
+                  description: Invoice text content to analyze. Required when file_path is not provided.
+                  example: |
+                    Invoice #INV-2024-001
+                    Vendor: Acme Corporation
+                    Date: 2024-07-10
+                    Total Amount: $1,500.00
+                file_path:
+                  type: string
+                  description: Optional path to invoice file. If provided, the function will read from this file instead of using the text parameter.
+                  example: /invoices/invoice_2024_001.txt
+      responses:
+        '200':
+          description: Successfully extracted invoice data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  extracted_fields:
+                    $ref: '#/components/schemas/ExtractedFields'
+                  analysis:
+                    $ref: '#/components/schemas/Analysis'
+        '400':
+          description: Bad request - missing or invalid input parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Missing required field text
+                  status:
+                    type: integer
+                    example: 400
+        '401':
+          description: Unauthorized - invalid or missing API key
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid API key
+                  status:
+                    type: integer
+                    example: 401
+        '500':
+          description: Internal server error - processing failed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Failed to process invoice Document Intelligence service unavailable
+                  status:
+                    type: integer
+                    example: 500
+
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: x-functions-key
+      in: header
+      description: Azure Function API key for authentication
+
+  schemas:
+    InvoiceRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Invoice text content to analyze
+        file_path:
+          type: string
+          description: Optional path to invoice file
+
+    InvoiceResponse:
+      type: object
+      properties:
+        extracted_fields:
+          $ref: '#/components/schemas/ExtractedFields'
+        analysis:
+          $ref: '#/components/schemas/Analysis'
+
+    ExtractedFields:
+      type: object
+      description: Extracted structured invoice fields
+      required:
+        - vendor_name
+        - invoice_number
+        - total_amount
+        - invoice_date
+      properties:
+        vendor_name:
+          type: string
+          description: Name of the vendor/issuer of the invoice
+          example: Acme Corporation
+        invoice_number:
+          type: string
+          description: Unique invoice identifier or invoice number
+          example: INV-2024-001
+        total_amount:
+          type: number
+          format: double
+          description: Total invoice amount in numeric format
+          example: 1500.00
+        invoice_date:
+          type: string
+          format: date
+          description: Invoice date in YYYY-MM-DD format
+          example: '2024-07-10'
+
+    Analysis:
+      type: object
+      description: Detailed analysis results from Document Intelligence
+      properties:
+        document_type:
+          type: string
+          description: Classification of document type (e.g., vendor_invoice, purchase_order)
+          example: vendor_invoice
+        confidence:
+          type: number
+          format: double
+          description: Confidence score (0-1) of the extraction accuracy
+          minimum: 0
+          maximum: 1
+          example: 0.95
+        vendor_name:
+          type: string
+          description: Vendor name as recognized by Document Intelligence
+          example: Acme Corporation
+        invoice_number:
+          type: string
+          description: Invoice number as recognized
+          example: INV-2024-001
+        total_amount:
+          type: number
+          format: double
+          description: Total amount as recognized
+          example: 1500.00
+        invoice_date:
+          type: string
+          format: date
+          description: Invoice date as recognized
+          example: '2024-07-10'
+        issues:
+          type: array
+          description: List of any issues or warnings encountered during processing
+          items:
+            type: string
+          example: []

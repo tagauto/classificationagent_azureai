@@ -1,0 +1,79 @@
+﻿{
+  "name": "invoice-agent",
+  "description": "Invoice extraction and analysis using Document Intelligence",
+  "backend": {
+    "type": "http",
+    "url": "https://invoice-agent-docintelligence2.azurewebsites.net/api/invoice",
+    "auth": {
+      "type": "header",
+      "headerName": "x-functions-key",
+      "headerValue": "<AZURE_FUNCTION_KEY>"
+    }
+  },
+  "inputSchema": {
+    "type": "object",
+    "properties": {
+      "text": {
+        "type": "string",
+        "description": "Invoice text to analyze"
+      },
+      "file_path": {
+        "type": "string",
+        "description": "Path to invoice file (optional)"
+      }
+    },
+    "required": ["text"]
+  },
+  "outputSchema": {
+    "type": "object",
+    "properties": {
+      "extracted_fields": {
+        "type": "object",
+        "properties": {
+          "vendor_name": {
+            "type": "string"
+          },
+          "invoice_number": {
+            "type": "string"
+          },
+          "total_amount": {
+            "type": "number"
+          },
+          "invoice_date": {
+            "type": "string"
+          }
+        }
+      },
+      "analysis": {
+        "type": "object",
+        "properties": {
+          "document_type": {
+            "type": "string"
+          },
+          "confidence": {
+            "type": "number"
+          },
+          "vendor_name": {
+            "type": "string"
+          },
+          "invoice_number": {
+            "type": "string"
+          },
+          "total_amount": {
+            "type": "number"
+          },
+          "invoice_date": {
+            "type": "string"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
